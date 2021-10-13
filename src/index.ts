@@ -1,4 +1,4 @@
-import { Client, Intents, Message } from 'discord.js';
+import { Client, Intents, Message, SelectMenuInteraction } from 'discord.js';
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES] });
 import config from '../config.json'
 import {roleArray} from './types'
@@ -7,14 +7,13 @@ client.on('ready', () => {
 })
 client.on('interactionCreate', async (e) => {
     if(e.isMessageComponent()) {
-        if(e.customId = "")
-        if(e.customId === "role-select" && e.componentType === "SELECT_MENU") {
+        if(e.customId.includes("role-select") && e.componentType === "SELECT_MENU") {
             console.log(e)
             if(!e.guildId || !e.member) return console.log("no member or guild")
             let guild = await client.guilds.fetch(e.guildId)
             let member = guild.members.cache.get(e.member.user.id);
             if(!member) return console.log("no member")
-            let role = guild.roles.cache.find(r => r.id == e.values[0]);
+            let role = guild.roles.cache.find(r => r.id == (e as SelectMenuInteraction).values[0]);
             if(!role) return console.log("no role")
             member.roles.add(role);
             e.reply(":D")
@@ -56,24 +55,15 @@ client.on('messageCreate', async (message: Message) => {
             components: [
                 {
                     type: "ACTION_ROW",
-                    components: [
-                        {
-                            type: "SELECT_MENU",
-                            customId: "role-select",
-                            options: guild ? (guild.roles.cache.filter(s => s.name !== "@everyone").filter(s => !s.tags).map(role => {
-                                return {label: role.name,value: role.id}
-                            })).slice(0, 25) : [
-                                {
-                                    label: "Nigga Role",
-                                    value: "897938535762522183",
-                                    
-                                }
-                            ]
-                        }
-                    ]
-                }
+                    components: [{type: "SELECT_MENU", customId: "role-select-1", options: splitedRoles[0].map(item => {return {label: item.role.name, value: item.id}})}]
+                },
+                {
+                    type: "ACTION_ROW",
+                    components: [{type: "SELECT_MENU", customId: "role-select-2", options: splitedRoles[1].map(item => {return {label: item.role.name, value: item.id}})}]
+                },
             ]
         })
     }
 })
 client.login(config.token);
+//splitedRoles.map((item, index) => {return {type: "SELECT_MENU", customId: "role-select"+index, options: item.map(hehe => {return {label: hehe.role.name, value: hehe.id}})}})
