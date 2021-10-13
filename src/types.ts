@@ -1,5 +1,6 @@
-// enum MessageComponentTypes {
-//     ACTION_ROW = "ACTION_ROW",
-//     BUTTON = "BUTTON",
-//     SELECT_MENU ="SELECT_MENU"
-// }
+import { Role } from "discord.js";
+
+export interface roleArray {
+    id: string,
+    role: Role
+}

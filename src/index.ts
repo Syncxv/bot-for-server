@@ -1,6 +1,7 @@
 import { Client, Intents, Message } from 'discord.js';
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES] });
 import config from '../config.json'
+import {roleArray} from './types'
 client.on('ready', () => {
     console.log("ready as ", client.user?.username)
 })
@@ -35,10 +36,21 @@ client.on('messageCreate', async (message: Message) => {
         const firstColorRole = rolesArray.map(e => e.role.name).indexOf("Burgundy Red")
         const lastColorRole = rolesArray.map(e => e.role.name).indexOf("IndianRed")
         console.log(firstColorRole, lastColorRole)
-        const hehe = rolesArray.slice(firstColorRole, lastColorRole)
-        console.log(hehe);
+        const allColorRoles = rolesArray.slice(firstColorRole, lastColorRole);
+        const splitedRoles = allColorRoles.reduce((resultArray: roleArray[][], item, index) => { 
+            const chunkIndex = Math.floor(index/25)
+          
+            if(!resultArray[chunkIndex]) {
+              resultArray[chunkIndex] = [] // start a new chunk
+            }
+          
+            resultArray[chunkIndex].push(item)
+          
+            return resultArray
+          }, []);
         (global as any).rolesArray = rolesArray;
         (global as any).guild = guild;
+        (global as any).splitedRoles = splitedRoles
         message.channel.send({
             content: "bruh",
             components: [
