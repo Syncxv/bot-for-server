@@ -2,7 +2,7 @@ import { Client, Intents, Message } from 'discord.js';
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES] });
 import config from '../config.json'
 const getGuild = async () => {
-    return await client.guilds.fetch("747955932834693273")
+    return await client.guilds.fetch("770554369707343884")
 }
 client.on('ready', () => {
     console.log("ready as ", client.user?.username)
@@ -27,7 +27,8 @@ client.on('interactionCreate', async (e) => {
 })
 client.on('messageCreate', async (message: Message) => {
     if(message.content === "!hehe") {
-        const guild = await getGuild()
+        if(!message.guildId) return
+        const guild = await client.guilds.fetch(message.guildId)
         console.log(guild)
         message.channel.send({
             content: "bruh",
@@ -38,12 +39,13 @@ client.on('messageCreate', async (message: Message) => {
                         {
                             type: "SELECT_MENU",
                             customId: "role-select",
-                            options: guild ? guild.roles.cache.filter(s => s.name !== "@everyone").filter(s => !s.tags).map(role => {
+                            options: guild ? (guild.roles.cache.filter(s => s.name !== "@everyone").filter(s => !s.tags).map(role => {
                                 return {label: role.name,value: role.id}
-                            }) : [
+                            })).slice(0, 25) : [
                                 {
                                     label: "Nigga Role",
-                                    value: "897938535762522183"
+                                    value: "897938535762522183",
+                                    
                                 }
                             ]
                         }
