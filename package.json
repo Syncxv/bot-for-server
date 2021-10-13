@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "watch": "npx tsc -w",
-    "start": "npx nodemon dist/src/index.js"
+    "start": "npx nodemon --exec node --inspect dist/src/index.js"
   },
   "keywords": [],
   "author": "",
