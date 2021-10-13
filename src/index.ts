@@ -1,4 +1,4 @@
-import { Client, Intents, Message, SelectMenuInteraction } from 'discord.js';
+import { Client, Intents, Message, SelectMenuInteraction  } from 'discord.js';
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES] });
 import config from '../config.json'
 import {roleArray} from './types'
@@ -16,7 +16,7 @@ client.on('interactionCreate', async (e) => {
             let role = guild.roles.cache.find(r => r.id == (e as SelectMenuInteraction).values[0]);
             if(!role) return console.log("no role")
             member.roles.add(role);
-            e.reply(":D")
+            e.reply({content: 'nice', ephemeral: true})
            
         }
     }
@@ -52,14 +52,30 @@ client.on('messageCreate', async (message: Message) => {
         (global as any).splitedRoles = splitedRoles
         message.channel.send({
             content: "bruh",
-            components: [
+            "embeds": [
                 {
-                    type: "ACTION_ROW",
-                    components: [{type: "SELECT_MENU", customId: "role-select-1", options: splitedRoles[0].map(item => {return {label: item.role.name, value: item.id}})}]
-                },
+                  "type": "rich",
+                  "title": `Self Role Colors`,
+                  "description": `hehehe`,
+                  "color": 0xc91b2f,
+                  "image": {
+                    "url": `https://media.discordapp.net/attachments/772427014366822451/804941315426877441/af3b27b4-e783-47b1-9ebf-8bf2abf1d92e.png?width=521&height=375`,
+                    "height": 0,
+                    "width": 0
+                  },
+                  "footer": {
+                    "text": `gang gang`
+                  }
+                }
+              ],
+              components: [
                 {
                     type: "ACTION_ROW",
                     components: [{type: "SELECT_MENU", customId: "role-select-2", options: splitedRoles[1].map(item => {return {label: item.role.name, value: item.id}})}]
+                },
+                {
+                    type: "ACTION_ROW",
+                    components: [{type: "SELECT_MENU", customId: "role-select-1", options: splitedRoles[0].map(item => {return {label: item.role.name, value: item.id}})}]
                 },
             ]
         })
