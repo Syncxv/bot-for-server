@@ -1,6 +1,6 @@
 import { Client, Intents, Message, SelectMenuInteraction  } from 'discord.js';
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES] });
-import config from '../config.json'
+// import config from '../config.json'
 import {roleArray} from './types'
 client.on('ready', () => {
     console.log("ready as ", client.user?.username)
@@ -81,5 +81,5 @@ client.on('messageCreate', async (message: Message) => {
         })
     }
 })
-client.login(config.token);
+client.login(process.env.token);
 //splitedRoles.map((item, index) => {return {type: "SELECT_MENU", customId: "role-select"+index, options: item.map(hehe => {return {label: hehe.role.name, value: hehe.id}})}})
